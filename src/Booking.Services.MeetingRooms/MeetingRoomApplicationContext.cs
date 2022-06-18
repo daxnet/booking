@@ -34,9 +34,13 @@ namespace Booking.Services.MeetingRooms
 
             modelBuilder.Entity<Location>()
                 .HasKey(x => x.Id);
+            modelBuilder.Entity<Location>()
+                .ToTable("Locations");
 
             modelBuilder.Entity<RoomConfiguration>()
                 .HasKey(x => x.Id);
+            modelBuilder.Entity<RoomConfiguration>()
+                .ToTable("RoomConfigurations");
 
             modelBuilder.Entity<MeetingRoom>()
                 .HasOne(p => p.Location)
@@ -47,11 +51,6 @@ namespace Booking.Services.MeetingRooms
                 .HasOne(p => p.Configuration)
                 .WithOne(p => p.MeetingRoom)
                 .HasForeignKey<RoomConfiguration>(fke => fke.MeetingRoomId);
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            base.OnConfiguring(optionsBuilder);
         }
     }
 }
