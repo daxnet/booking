@@ -1,6 +1,6 @@
 ﻿namespace Booking.Services.Reservations.Models
 {
-    public class RegularReservationStrategy : IReservationStrategy
+    public sealed class RegularReservationStrategy : IReservationStrategy
     {
         public RegularReservationStrategy() { }
 

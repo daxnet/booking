@@ -5,7 +5,9 @@ VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Booking.Services.MeetingRooms", "Booking.Services.MeetingRooms\Booking.Services.MeetingRooms.csproj", "{CBD0106C-34FE-4D90-B359-37F75C7EEB3A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Booking.Services.Reservations", "Booking.Services.Reservations\Booking.Services.Reservations.csproj", "{9E7D47FD-3D0F-4947-B711-F0A8855A1807}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Booking.Services.Reservations", "Booking.Services.Reservations\Booking.Services.Reservations.csproj", "{9E7D47FD-3D0F-4947-B711-F0A8855A1807}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Booking.Services.Auth", "Booking.Services.Auth\Booking.Services.Auth.csproj", "{D0506366-BA2B-4221-A8CB-7E6B18BC4818}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{9E7D47FD-3D0F-4947-B711-F0A8855A1807}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E7D47FD-3D0F-4947-B711-F0A8855A1807}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E7D47FD-3D0F-4947-B711-F0A8855A1807}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0506366-BA2B-4221-A8CB-7E6B18BC4818}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0506366-BA2B-4221-A8CB-7E6B18BC4818}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0506366-BA2B-4221-A8CB-7E6B18BC4818}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0506366-BA2B-4221-A8CB-7E6B18BC4818}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

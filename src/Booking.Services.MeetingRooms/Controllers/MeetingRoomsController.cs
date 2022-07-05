@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Booking.Services.MeetingRooms.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class MeetingRoomsController : ControllerBase
     {
         private readonly MeetingRoomApplicationContext _context;
@@ -26,10 +26,10 @@ namespace Booking.Services.MeetingRooms.Controllers
 
             await _context.MeetingRooms!.AddAsync(meetingRoom);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetMeetingRoom), meetingRoom.Id);
+            return CreatedAtAction(nameof(GetMeetingRoom), new { id = meetingRoom.Id }, meetingRoom.Id);
         }
 
-        [HttpDelete("id")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMeetingRoom(long id)
         {
             var meetingRoom = _context.MeetingRooms!.FirstOrDefault(mr => mr.Id == id);
@@ -43,7 +43,7 @@ namespace Booking.Services.MeetingRooms.Controllers
             return Ok();
         }
 
-        [HttpGet("id")]
+        [HttpGet("{id}")]
         public IActionResult GetMeetingRoom(long id)
         {
             var meetingRoom = _context.MeetingRooms!.Include(r => r.Location)
@@ -64,7 +64,7 @@ namespace Booking.Services.MeetingRooms.Controllers
                     .Include(r => r.Location)
                     .Include(r => r.Configuration));
 
-        [HttpPatch("id")]
+        [HttpPatch("{id}")]
         public async Task<IActionResult> PatchMeetingRoom(long id, [FromBody] JsonPatchDocument<MeetingRoom> patchDoc)
         {
             if (patchDoc != null)

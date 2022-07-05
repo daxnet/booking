@@ -41,7 +41,7 @@ app.MapControllers();
 
 app.Run();
 
-NewtonsoftJsonPatchInputFormatter GetJsonPatchInputFormatter()
+static NewtonsoftJsonPatchInputFormatter GetJsonPatchInputFormatter()
 {
 #pragma warning disable ASP0000 // Do not call 'IServiceCollection.BuildServiceProvider' in 'ConfigureServices'
     var builder = new ServiceCollection()
