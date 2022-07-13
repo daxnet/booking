@@ -1,4 +1,5 @@
 ﻿using Booking.Services.MeetingRooms.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,7 @@ namespace Booking.Services.MeetingRooms.Controllers
         }
 
         [HttpPost]
+        [Authorize("management.create")]
         public async Task<IActionResult> CreateMeetingRoom([FromBody] MeetingRoom meetingRoom)
         {
             if (!ModelState.IsValid)
@@ -30,6 +32,7 @@ namespace Booking.Services.MeetingRooms.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize("management.delete")]
         public async Task<IActionResult> DeleteMeetingRoom(long id)
         {
             var meetingRoom = _context.MeetingRooms!.FirstOrDefault(mr => mr.Id == id);
@@ -44,6 +47,7 @@ namespace Booking.Services.MeetingRooms.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize("management.read")]
         public IActionResult GetMeetingRoom(long id)
         {
             var meetingRoom = _context.MeetingRooms!.Include(r => r.Location)
@@ -58,6 +62,7 @@ namespace Booking.Services.MeetingRooms.Controllers
         }
 
         [HttpGet]
+        [Authorize("management.read")]
         public IActionResult GetMeetingRooms([FromQuery] int pageSize = 10, int pageNumber = 0) => Ok(_context.MeetingRooms!
                     .Skip(pageNumber * pageSize)
                     .Take(pageSize)
@@ -65,6 +70,7 @@ namespace Booking.Services.MeetingRooms.Controllers
                     .Include(r => r.Configuration));
 
         [HttpPatch("{id}")]
+        [Authorize("management.update")]
         public async Task<IActionResult> PatchMeetingRoom(long id, [FromBody] JsonPatchDocument<MeetingRoom> patchDoc)
         {
             if (patchDoc != null)

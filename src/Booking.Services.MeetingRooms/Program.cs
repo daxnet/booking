@@ -1,4 +1,5 @@
 using Booking.Services.MeetingRooms;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +19,22 @@ builder.Services.AddControllers(options =>
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.Authority = "https://localhost:9001";
+        options.Audience = "management";
+        options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
+    });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("management.read", policy => policy.RequireClaim("scope", "management.read"));
+    options.AddPolicy("management.create", policy => policy.RequireClaim("scope", "management.create"));
+    options.AddPolicy("management.update", policy => policy.RequireClaim("scope", "management.update"));
+    options.AddPolicy("management.delete", policy => policy.RequireClaim("scope", "management.delete"));
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -35,6 +52,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
