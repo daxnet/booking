@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,13 +21,23 @@ builder.Services.AddControllers(options =>
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.Authority = "https://localhost:9001";
-        options.Audience = "management";
-        options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
-    });
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.SaveToken = true;
+    options.TokenValidationParameters = CreateTokenValidationParameters();
+});
+
+//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//    .AddJwtBearer(options =>
+//    {
+//        options.Authority = "https://localhost:9001";
+//        options.Audience = "management";
+//        options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
+//    });
 
 builder.Services.AddAuthorization(options =>
 {
@@ -58,6 +70,22 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+static TokenValidationParameters CreateTokenValidationParameters() => new()
+{
+    ValidateIssuer = false,
+    ValidateAudience = false,
+    ValidateIssuerSigningKey = false,
+    SignatureValidator = delegate (string token, TokenValidationParameters parameters)
+    {
+        var jwt = new JwtSecurityToken(token);
+        return jwt;
+    },
+    RequireExpirationTime = true,
+    ValidateLifetime = true,
+    ClockSkew = TimeSpan.Zero,
+    RequireSignedTokens = false
+};
 
 static NewtonsoftJsonPatchInputFormatter GetJsonPatchInputFormatter()
 {

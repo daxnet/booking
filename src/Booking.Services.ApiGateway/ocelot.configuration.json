@@ -1,0 +1,51 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 9002
+        }
+      ],
+      "UpstreamPathTemplate": "/meeting-room-service/{everything}",
+      "UpstreamHttpMethod": [
+        "Get",
+        "Post",
+        "Put",
+        "Patch",
+        "Delete",
+        "Options"
+      ],
+      "SwaggerKey": "MeetingRoomService",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "management-provider-key",
+        "AllowedScopes": [
+          "management.read",
+          "management.create"
+        ]
+      },
+      "AddClaimsToRequest": {
+        "scope": "Claims[scope] > value"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 9001
+        }
+      ],
+      "UpstreamPathTemplate": "/auth/{everything}",
+      "UpstreamHttpMethod": [
+        "Get",
+        "Post",
+        "Options"
+      ],
+      "SwaggerKey": "AuthService"
+    }
+  ]
+}
