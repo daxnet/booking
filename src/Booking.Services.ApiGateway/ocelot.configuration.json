@@ -31,7 +31,7 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/{everything}",
+      "DownstreamPathTemplate": "/auth/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -45,6 +45,9 @@
         "Post",
         "Options"
       ],
+      "UpstreamHeaderTransform": {
+        "X-Forwarded-Host": "{UpstreamHost}"
+      },
       "SwaggerKey": "AuthService"
     }
   ]

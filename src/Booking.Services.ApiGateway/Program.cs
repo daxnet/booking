@@ -7,7 +7,7 @@ builder.Configuration.AddJsonFile("ocelot.configuration.json", false, true);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-var idsAuthority = "https://localhost:9000/auth";
+var idsAuthority = "https://localhost:9000/auth/";
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

@@ -1,6 +1,7 @@
 using Booking.Services.Auth.Data;
 using Booking.Services.Auth.Models;
 using Duende.IdentityServer;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -35,6 +36,14 @@ namespace Booking.Services.Auth
                 .AddInMemoryClients(Config.Clients)
                 .AddAspNetIdentity<ApplicationUser>();
 
+            builder.Services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedHost;
+                options.ForwardLimit = 2;  //Limit number of proxy hops trusted
+                options.KnownNetworks.Clear();
+                options.KnownProxies.Clear();
+            });
+
             //builder.Services.AddAuthentication()
             //    .AddGoogle(options =>
             //    {
@@ -52,6 +61,8 @@ namespace Booking.Services.Auth
 
         public static WebApplication ConfigurePipeline(this WebApplication app)
         {
+            app.UseForwardedHeaders();
+
             app.UseSerilogRequestLogging();
 
             if (app.Environment.IsDevelopment())
@@ -59,13 +70,20 @@ namespace Booking.Services.Auth
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseStaticFiles();
-            app.UseRouting();
-            app.UseIdentityServer();
-            app.UseAuthorization();
-
-            app.MapRazorPages()
-                .RequireAuthorization();
+            app.Map("/auth", app =>
+            {
+                app.UseStaticFiles();
+                app.UseRouting();
+                app.UseAuthorization();
+                app.UseEndpoints(endpoints =>
+                {
+                    endpoints.MapControllerRoute(
+                        name: "default",
+                        pattern: "{controller=Home}/{action=Index}/{id?}");
+                    endpoints.MapRazorPages().RequireAuthorization();
+                });
+                app.UseIdentityServer();
+            });
 
             return app;
         }

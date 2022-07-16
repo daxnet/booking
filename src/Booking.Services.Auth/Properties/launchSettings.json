@@ -2,6 +2,7 @@
   "profiles": {
     "SelfHost": {
       "commandName": "Project",
+      "launchUrl": "auth",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
