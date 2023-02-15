@@ -1,5 +1,8 @@
-﻿@inherits LayoutComponentBase
-
+﻿@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@inherits LayoutComponentBase
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IAccessTokenProvider AccessTokenProvider
+@inject NavigationManager NavigationManager
 <div class="page">
     <div class="sidebar">
         <NavMenu />
@@ -16,3 +19,20 @@
         </article>
     </main>
 </div>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        var authenticationState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authenticationState.User;
+        if (user?.Identity?.IsAuthenticated ?? false)
+        {
+            var tokenResult = await AccessTokenProvider.RequestAccessToken();
+            if (tokenResult.Status == AccessTokenResultStatus.RequiresRedirect)
+            {
+                NavigationManager.NavigateTo(tokenResult.RedirectUrl);
+            }
+        }
+    }
+}

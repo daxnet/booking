@@ -5,3 +5,28 @@ services:
         build:
             context: docker/postgres
             dockerfile: Dockerfile
+    booking-meetingrooms-service:
+        image: daxnet/booking-meetingrooms-service
+        build: 
+            context: src
+            dockerfile: Booking.Services.MeetingRooms/Dockerfile
+    booking-reservation-service:
+        image: daxnet/booking-reservation-service
+        build:
+            context: src
+            dockerfile: Booking.Services.Reservations/Dockerfile
+    booking-auth-service:
+        image: daxnet/booking-auth-service
+        build:
+            context: src
+            dockerfile: Booking.Services.Auth/Dockerfile
+    booking-api-gateway:
+        image: daxnet/booking-api-gateway
+        build:
+            context: src
+            dockerfile: Booking.Services.ApiGateway/Dockerfile
+    booking-web:
+        image: daxnet/booking-web
+        build:
+            context: src
+            dockerfile: Booking.WebApp/Dockerfile

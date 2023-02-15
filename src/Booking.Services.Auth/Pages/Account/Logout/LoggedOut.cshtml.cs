@@ -21,13 +21,14 @@ namespace Booking.Services.Auth.Pages.Logout
         {
             // get context information (client name, post logout redirect URI and iframe for federated signout)
             var logout = await _interactionService.GetLogoutContextAsync(logoutId);
+            var signOutIFrameUrl = logout?.SignOutIFrameUrl.Replace("/connect", "/auth/connect");
 
             View = new LoggedOutViewModel
             {
                 AutomaticRedirectAfterSignOut = LogoutOptions.AutomaticRedirectAfterSignOut,
                 PostLogoutRedirectUri = logout?.PostLogoutRedirectUri,
                 ClientName = String.IsNullOrEmpty(logout?.ClientName) ? logout?.ClientId : logout?.ClientName,
-                SignOutIframeUrl = logout?.SignOutIFrameUrl
+                SignOutIframeUrl = signOutIFrameUrl
             };
         }
     }

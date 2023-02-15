@@ -1,0 +1,14 @@
+version: '3.8'
+volumes:
+  postgres_data:
+services:
+  booking-postgres:
+    image: daxnet/booking-postgres
+    environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+        - POSTGRES_DB=booking
+    volumes:
+        - postgres_data:/data:Z
+    ports:
+        - "5432:5432"
