@@ -2,7 +2,7 @@ FROM nginx:alpine AS base
 WORKDIR /usr/share/nginx/html
 EXPOSE 80
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["Booking.WebApp/Booking.WebApp.csproj", "Booking.WebApp/"]
 RUN dotnet restore "Booking.WebApp/Booking.WebApp.csproj"
