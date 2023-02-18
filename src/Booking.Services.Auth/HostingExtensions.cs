@@ -36,6 +36,14 @@ namespace Booking.Services.Auth
                 .AddInMemoryClients(Config.Clients)
                 .AddAspNetIdentity<ApplicationUser>();
 
+            builder.Services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedHost;
+                options.ForwardLimit = 2;
+                options.KnownNetworks.Clear();
+                options.KnownProxies.Clear();
+            });
+
             //builder.Services.AddAuthentication()
             //    .AddGoogle(options =>
             //    {
@@ -59,40 +67,41 @@ namespace Booking.Services.Auth
             //{
             //    app.UseDeveloperExceptionPage();
             //}
+            app.UseForwardedHeaders();
 
-            //app.Map("/auth", app =>
-            //{
-            //    app.UseStaticFiles();
-            //    app.UseRouting();
-            //    app.UseAuthorization();
-            //    app.UseEndpoints(endpoints =>
-            //    {
-            //        endpoints.MapControllerRoute(
-            //            name: "default",
-            //            pattern: "{controller=Home}/{action=Index}/{id?}");
-            //        endpoints.MapRazorPages().RequireAuthorization();
-            //    });
-            //    app.UseIdentityServer();
-            //});
-
-            //return app;
-
-            app.UseSerilogRequestLogging();
-
-            if (app.Environment.IsDevelopment())
+            app.Map("/auth", app =>
             {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseStaticFiles();
-            app.UseRouting();
-            app.UseIdentityServer();
-            app.UseAuthorization();
-
-            app.MapRazorPages()
-                .RequireAuthorization();
+                app.UseStaticFiles();
+                app.UseRouting();
+                app.UseAuthorization();
+                app.UseEndpoints(endpoints =>
+                {
+                    endpoints.MapControllerRoute(
+                        name: "default",
+                        pattern: "{controller=Home}/{action=Index}/{id?}");
+                    endpoints.MapRazorPages().RequireAuthorization();
+                });
+                app.UseIdentityServer();
+            });
 
             return app;
+
+            //app.UseSerilogRequestLogging();
+
+            //if (app.Environment.IsDevelopment())
+            //{
+            //    app.UseDeveloperExceptionPage();
+            //}
+
+            //app.UseStaticFiles();
+            //app.UseRouting();
+            //app.UseIdentityServer();
+            //app.UseAuthorization();
+
+            //app.MapRazorPages()
+            //    .RequireAuthorization();
+
+            //return app;
         }
     }
 }
