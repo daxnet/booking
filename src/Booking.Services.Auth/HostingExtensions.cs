@@ -24,6 +24,7 @@ namespace Booking.Services.Auth
             builder.Services
                 .AddIdentityServer(options =>
                 {
+                    options.IssuerUri = builder.Configuration["identityServer:issuer"];
                     options.Events.RaiseErrorEvents = true;
                     options.Events.RaiseInformationEvents = true;
                     options.Events.RaiseFailureEvents = true;
