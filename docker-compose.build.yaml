@@ -20,6 +20,11 @@ services:
         build:
             context: src
             dockerfile: Booking.Services.Auth/Dockerfile
+    booking-nginx:
+        image: daxnet/booking-nginx
+        build:
+            context: docker/nginx
+            dockerfile: Dockerfile
     # booking-api-gateway:
     #     image: daxnet/booking-api-gateway
     #     build:
