@@ -16,19 +16,24 @@ services:
     image: daxnet/booking-auth-service
     environment:
       - ConnectionStrings__DefaultConnection=Host=booking-postgres;Database=booking_aspnet_identity;Username=postgres;Password=postgres
-      - identityServer__issuer=http://booking-auth-service:9001
+      - identityServer__issuer=http://booking-auth-service:9001/auth
+      - identityServer__basePath=/auth
     links:
       - booking-postgres
-    ports:
-      - 9001:9001
+    # ports:
+    #   - 9001:9001
   booking-meetingrooms-service:
     image: daxnet/booking-meetingrooms-service
     environment:
       - db__connectionString=Host=booking-postgres;Database=booking;Username=postgres;Password=postgres
-      - authority__url=http://booking-auth-service:9001
+      - authority__url=http://booking-auth-service:9001/auth
       - Logging__LogLevel__Default=Debug
     links:
       - booking-postgres
       - booking-auth-service
+    # ports:
+    #   - 9002:9002
+  booking-nginx:
+    image: daxnet/booking-nginx
     ports:
-      - 9002:9002
+      - 443:443

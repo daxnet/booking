@@ -1,0 +1,32 @@
+[req]
+default_bits = 2048
+prompt = no
+default_md = sha256
+req_extensions = v3_req
+distinguished_name = dn
+x509_extensions = v3_ca
+
+[ dn ]
+C=CN
+ST=Shanghai
+L=Shanghai
+O=localhost
+OU=localhost
+emailAddress=abc@localhost.com
+CN = localhost
+
+[ v3_req ]
+basicConstraints = CA:FALSE
+keyUsage = digitalSignature, nonRepudiation, keyEncipherment
+
+[ v3_ca ]
+subjectKeyIdentifier   = hash
+authorityKeyIdentifier = keyid:always,issuer:always
+subjectAltName         = @alt_names
+issuerAltName          = issuer:copy
+
+[ alt_names ]
+DNS.1 = localhost
+DNS.2 = localhost.com
+DNS.3 = booking.daxnet.com
+

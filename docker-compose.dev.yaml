@@ -12,7 +12,7 @@ services:
         - postgres_data:/data:Z
     ports:
         - "5432:5432"
-  booking-nginx:
-    image: daxnet/booking-nginx
-    ports:
-        - "8080:80"
+  # booking-nginx:
+  #   image: daxnet/booking-nginx
+  #   ports:
+  #       - "8080:80"

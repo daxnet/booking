@@ -54,46 +54,60 @@ namespace Booking.Services.Auth
 
         public static WebApplication ConfigurePipeline(this WebApplication app)
         {
-            //app.UseSerilogRequestLogging();
-
-            //if (app.Environment.IsDevelopment())
-            //{
-            //    app.UseDeveloperExceptionPage();
-            //}
-
-            //app.Map("/auth", app =>
-            //{
-            //    app.UseStaticFiles();
-            //    app.UseRouting();
-            //    app.UseAuthorization();
-            //    app.UseEndpoints(endpoints =>
-            //    {
-            //        endpoints.MapControllerRoute(
-            //            name: "default",
-            //            pattern: "{controller=Home}/{action=Index}/{id?}");
-            //        endpoints.MapRazorPages().RequireAuthorization();
-            //    });
-            //    app.UseIdentityServer();
-            //});
-
-            //return app;
-
-            app.UseSerilogRequestLogging();
-
-            if (app.Environment.IsDevelopment())
+            if (app.Environment.IsProduction())
             {
-                app.UseDeveloperExceptionPage();
+                var fordwardedHeaderOptions = new ForwardedHeadersOptions
+                {
+                    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
+                    ForwardLimit = 2
+                };
+                fordwardedHeaderOptions.KnownNetworks.Clear();
+                fordwardedHeaderOptions.KnownProxies.Clear();
+                app.UseForwardedHeaders(fordwardedHeaderOptions);
+
+                
+                var basePath = app.Configuration["identityServer:basePath"];
+                if (!string.IsNullOrEmpty(basePath))
+                {
+                    app.Map(basePath, app =>
+                    {
+                        app.UseSerilogRequestLogging();
+                        app.UseStaticFiles();
+                        app.UseRouting();
+                        app.UseIdentityServer();
+                        app.UseAuthorization();
+
+                        app.UseEndpoints(endpoints =>
+                        {
+                            endpoints.MapControllerRoute(
+                                name: "default",
+                                pattern: "{controller=Home}/{action=Index}/{id?}");
+                            endpoints.MapRazorPages().RequireAuthorization();
+                        });
+
+                    });
+                }
+                else
+                {
+                    app.MapRazorPages().RequireAuthorization();
+                }
+
+                return app;
             }
+            else
+            {
+                app.UseSerilogRequestLogging();
+                app.UseDeveloperExceptionPage();
+                app.UseStaticFiles();
+                app.UseRouting();
+                app.UseIdentityServer();
+                app.UseAuthorization();
 
-            app.UseStaticFiles();
-            app.UseRouting();
-            app.UseIdentityServer();
-            app.UseAuthorization();
+                app.MapRazorPages()
+                    .RequireAuthorization();
 
-            app.MapRazorPages()
-                .RequireAuthorization();
-
-            return app;
+                return app;
+            }
         }
     }
 }
