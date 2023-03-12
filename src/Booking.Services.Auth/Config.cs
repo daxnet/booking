@@ -79,6 +79,24 @@ namespace Booking.Services.Auth
                     },
                     RedirectUris = { "https://localhost:9200/authentication/login-callback" },
                     PostLogoutRedirectUris = { "https://localhost:9200/authentication/logout-callback" }
+                },
+
+                new Client
+                {
+                    ClientId = "webAppProd",
+                    AllowedGrantTypes = GrantTypes.Code,
+                    RequirePkce = true,
+                    RequireClientSecret = false,
+                    AllowedCorsOrigins = { "https://localhost" },
+                    AllowedScopes =
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        "management.read",
+                        "management.create"
+                    },
+                    RedirectUris = { "https://localhost/authentication/login-callback" },
+                    PostLogoutRedirectUris = { "https://localhost/authentication/logout-callback" }
                 }
             };
     }

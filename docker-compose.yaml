@@ -33,7 +33,10 @@ services:
       - booking-auth-service
     # ports:
     #   - 9002:9002
+  booking-web:
+    image: daxnet/booking-web
   booking-nginx:
     image: daxnet/booking-nginx
     ports:
       - 443:443
+  
